@@ -7,10 +7,15 @@ environment:
       CONDA_NPY: "18"
 
 install:
-  # this installs the appropriate Miniconda (Py2/Py3, 32/64 bit),
-  # as well as pip, conda-build, and the binstar CLI
+  # this installs the appropriate Miniconda
   - powershell .\\ci\\appveyor\\install.ps1
   - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+   # download/install OCE from DLR-SC channel
+  - conda config --add channels https://conda.anaconda.org/dlr-sc
 
 build: false
 
