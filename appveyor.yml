@@ -15,7 +15,7 @@ install:
   # Useful for debugging any issues with conda
   - conda info -a
    # download/install OCE from DLR-SC channel
-  - conda config --add channels https://conda.anaconda.org/dlr-sc
+  - conda install -c https://conda.anaconda.org/dlr-sc oce
 
 build: false
 
