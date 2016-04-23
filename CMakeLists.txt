@@ -7,7 +7,11 @@ set(SMESH_VERSION_MINOR 6)
 set(SMESH_VERSION_PATCH)
 set(SMESH_VERSION_TWEAK)
 
-include_directories(/opt/netgen/include /workspace/netgen-4.9.13/libsrc/include)
+##########
+# Netgen #
+##########
+include_directories(/opt/netgen/include ${CMAKE_ROOT}/netgen-4.9.13/libsrc/include)
+link_directories(/opt/netgen/lib)
 
 
 #####################
