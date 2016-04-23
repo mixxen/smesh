@@ -127,7 +127,7 @@ MEFISTO2D_EXPORT
   #define qutr2d   QUTR2D
   #define surtd2   SURTD2
   #define qualitetrte	QUALITETRTE
-  
+
   #define areteideale ARETEIDEALE
 
   #define MEFISTO2D_STDCALL __stdcall
@@ -135,7 +135,22 @@ MEFISTO2D_EXPORT
 #elif defined(WIN32) && defined (__WATCOM__)
 
   #define MEFISTO2D_STDCALL
-  
+  #define insoar  insoar_
+  #define azeroi  azeroi_
+  #define fasoar  fasoar_
+  #define teajte  teajte_
+  #define tehote  tehote_
+  #define tetrte  tetrte_
+  #define aisoar  aisoar_
+  #define tedela  tedela_
+  #define terefr  terefr_
+  #define tesuex  tesuex_
+  #define teamqt  teamqt_
+  #define nusotr  nusotr_
+  #define qutr2d  qutr2d_
+  #define surtd2  surtd2_
+  #define qualitetrte qualitetrte_
+  #define areteideale areteideale_
 #else //Lin and MacOSX use f77
 
   #define MEFISTO2D_STDCALL
@@ -193,18 +208,18 @@ extern "C" { MEFISTO2D_EXPORT void MEFISTO2D_STDCALL qualitetrte( R3 *mnpxyd,
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" { void MEFISTO2D_STDCALL tempscpu( double & tempsec ); }
-    
+
 //Retourne le temps CPU utilise en secondes
 
 extern "C" { void MEFISTO2D_STDCALL deltacpu( R & dtcpu ); }
-    
+
 //Retourne le temps CPU utilise en secondes depuis le precedent appel
 
 //initialiser le tableau mnsoar pour le hachage des aretes
-extern "C" { void MEFISTO2D_STDCALL insoar( Z & mxsomm, 
-										    Z & mosoar, 
-											Z & mxsoar, 
-											Z & n1soar, 
+extern "C" { void MEFISTO2D_STDCALL insoar( Z & mxsomm,
+										    Z & mosoar,
+											Z & mxsoar,
+											Z & n1soar,
 											Z * mnsoar );}
 
 //mettre a zero les nb entiers de tab
@@ -289,7 +304,7 @@ extern "C" { void MEFISTO2D_STDCALL  tedela( R3 * mnpxyd, Z * mnarst,
 }
 // boucle sur les aretes internes (non sur une ligne de la frontiere)
 // avec echange des 2 diagonales afin de rendre la triangulation delaunay
- 
+
 extern "C" { void MEFISTO2D_STDCALL terefr( Z & nbarpi, R3 * mnpxyd,
 			    Z & mosoar, Z & mxsoar, Z & n1soar, Z * mnsoar,
 			    Z & moartr, Z & mxartr, Z & n1artr, Z * mnartr, Z * mnarst,
@@ -322,7 +337,7 @@ extern "C" { void MEFISTO2D_STDCALL teamqt( Z & nutysu, R & aretmx, R & airemx,
 // suppression des aretes trop longues ou trop courtes
 // modification de la topologie des groupes de triangles
 // mise en delaunay de la triangulation
- 
+
 extern "C" { void MEFISTO2D_STDCALL nusotr( Z & nt, Z & mosoar, Z * mnsoar, Z & moartr, Z * mnartr,Z * nosotr );
 }
 //retrouver les numero des 3 sommets du triangle nt

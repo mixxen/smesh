@@ -24,21 +24,18 @@
 //  Author : Alain PERRONNET
 //  Date   : 13 novembre 2006
 
+
 #include "Rn.h"
 #include "aptrte.h"
 #include "utilities.h"
 
-#ifndef MEFISTO_VERBOSE
-#undef MESSAGE
-#define MESSAGE(msg)
-#endif
 
 using namespace std;
 
 extern "C"
 {
   R aretemaxface_;
-  MEFISTO2D_EXPORT   
+  MEFISTO2D_EXPORT
 	void
 	  MEFISTO2D_STDCALL
 	  areteideale(R &_areteideale)
@@ -55,7 +52,7 @@ static double cpunew, cpuold=0;
 
 void MEFISTO2D_STDCALL tempscpu_( double & tempsec )
 //Retourne le temps CPU utilise en secondes
-{  
+{
   tempsec = ( (double) clock() ) / CLOCKS_PER_SEC;
   //MESSAGE( "temps cpu=" << tempsec );
 }
@@ -236,7 +233,7 @@ void  aptrte( Z   nutysu, R      aretmx,
 // 	 << " " << mnpxyd[ns0].y << " longueur arete=" << mnpxyd[ns0].z);
 
     //carre de la longueur de l'arete 1 de la ligne fermee n
-    d = pow( uvslf[ns0+1].x - uvslf[ns0].x, 2 ) 
+    d = pow( uvslf[ns0+1].x - uvslf[ns0].x, 2 )
       + pow( uvslf[ns0+1].y - uvslf[ns0].y, 2 ) ;
     aremin = Min( aremin, d );
     aremax = Max( aremax, d );
@@ -291,7 +288,7 @@ void  aptrte( Z   nutysu, R      aretmx,
  	   << " " << mnpxyd[ns].y << " longueur arete=" << mnpxyd[ns].z);
 
       //carre de la longueur de l'arete
-      d = pow( uvslf[ns2-1].x - uvslf[ns1-1].x, 2) 
+      d = pow( uvslf[ns2-1].x - uvslf[ns1-1].x, 2)
         + pow( uvslf[ns2-1].y - uvslf[ns1-1].y, 2);
       aremin = Min( aremin, d );
       aremax = Max( aremax, d );
@@ -844,6 +841,6 @@ void MEFISTO2D_STDCALL qualitetrte( R3 *mnpxyd,
   if( nbtrianeg>0 )
     MESSAGE( "ATTENTION: "<< nbtrianeg << " TRIANGLES d'AIRE NEGATIVE" );
 
-  MESSAGE(" ");
+  MESSAGE("_");
   return;
 }
