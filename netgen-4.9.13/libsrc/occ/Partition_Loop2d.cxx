@@ -22,7 +22,6 @@
 #include <BRepAdaptor_Surface.hxx>
 #include <BRepAlgo_AsDes.hxx>
 #include <BRepAlgo_FaceRestrictor.hxx>
-#include <BRepOffset_DataMapOfShapeReal.hxx>
 #include <BRepTopAdaptor_FClass2d.hxx>
 #include <BRep_Builder.hxx>
 #include <BRep_Tool.hxx>
@@ -50,6 +49,15 @@
 #include <TopoDS_Wire.hxx>
 #include <gp_Pnt.hxx>
 #include <gp_Pnt2d.hxx>
+
+#include <Standard_Version.hxx>
+
+#if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060400
+// porting to OCCT6.5.1
+#include <TopTools_DataMapOfShapeReal.hxx>
+#else
+#include <BRepOffset_DataMapOfShapeReal.hxx>
+#endif
 
 //=======================================================================
 //function : Partition_Loop2d
@@ -209,7 +217,7 @@ static Standard_Boolean  SelectEdge(const BRepAdaptor_Surface& Surf,
     Cc->D1(uc, PC, CTg1);
     if (!isForward) CTg1.Reverse();
 
-    Standard_Real anglemin = 3 * PI, tolAng = 1.e-8;
+    Standard_Real anglemin = 3 * M_PI, tolAng = 1.e-8;
 
     // select an edge whose first derivative is most left of CTg1
     // ie an angle between Tg1 and CTg1 is least
@@ -233,7 +241,7 @@ static Standard_Boolean  SelectEdge(const BRepAdaptor_Surface& Surf,
       // -PI < angle < PI
       Standard_Real angle = Tg1.Angle(CTg1);
 
-      if (PI - Abs(angle) <= tolAng)
+      if (M_PI - Abs(angle) <= tolAng)
       {
         // an angle is too close to PI; assure that an angle sign really
         // reflects an edge position: +PI - an edge is worst,
@@ -519,7 +527,12 @@ static void prepareDegen (const TopoDS_Edge&                        DegEdge,
     DC.Initialize( DegEdge, F );
 
   // avoid intersecting twice the same edge
+#if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060400
+// porting to OCCT6.5.1
+  TopTools_DataMapOfShapeReal EUMap ( EdgesList.Extent() );
+#else
   BRepOffset_DataMapOfShapeReal EUMap ( EdgesList.Extent() );
+#endif
 
   Standard_Real U, f, l;
   BRep_Tool::Range (DegEdge, f, l);

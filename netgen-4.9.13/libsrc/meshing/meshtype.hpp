@@ -12,6 +12,7 @@
     Classes for NETGEN
 */
 
+class Mesh; // added due to compilation errors on some platforms
 
 enum ELEMENT_TYPE { 
   SEGMENT = 1, SEGMENT3 = 2,

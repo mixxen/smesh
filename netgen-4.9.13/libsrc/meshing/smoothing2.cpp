@@ -302,7 +302,8 @@ namespace netgen
     vgrad = 0;
     badness = 0;
 
-    meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    //normal already computed: meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    n = normal;
     pp1 = sp1 + x(0) * t1 + x(1) * t2;
 
     //  meshthis -> ProjectPoint (surfi, pp1);
@@ -360,7 +361,8 @@ namespace netgen
     vgrad = 0;
     badness = 0;
 
-    meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    //normal already computed: meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    n = normal;
 
     pp1 = sp1 + x(0) * t1 + x(1) * t2;
 
@@ -514,7 +516,8 @@ namespace netgen
     vgrad = 0;
     badness = 0;
 
-    meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    //normal already computed: meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    n = normal;
 
     pp1 = sp1 + x(0) * t1 + x(1) * t2;
 
@@ -586,7 +589,8 @@ namespace netgen
     vgrad = 0;
     badness = 0;
 
-    meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    //normal already computed: meshthis -> GetNormalVector (surfi, sp1, gi1, n);
+    n = normal;
 
     // pp1 = sp1;
     //    pp1.Add2 (x.Get(1), t1, x.Get(2), t2);
@@ -973,7 +977,7 @@ namespace netgen
 		{
 		  mesh[pi] = Point<3> (origp);
 		}
-	    
+	      break; // exit as <fact> is not used anymore
 	    }
 	}
 

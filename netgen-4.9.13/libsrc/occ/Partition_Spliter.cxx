@@ -79,6 +79,8 @@
 #include <GeomAdaptor_Curve.hxx>
 #include <TopOpeBRepTool_CurveTool.hxx>
 
+#include <Standard_Version.hxx>
+
 #ifdef DEB
 //# define PART_PERF
 #endif
@@ -1169,7 +1171,12 @@ static void findEqual (const TopTools_ListOfShape& EL1,
           for (; j<=nbj && ok; ++j) {
             if (Extrema.IsMin(j)) {
 	      hasMin = Standard_True;
+#if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060400
+// porting to OCCT6.5.1
+              ok = Extrema.SquareDistance(j) <= tol * tol;
+#else
               ok = Extrema.Value(j) <= tol;
+#endif
 	    }
           }
         }

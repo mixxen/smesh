@@ -86,6 +86,9 @@
 #include <TopOpeBRepTool_OutCurveType.hxx>
 #include <TopOpeBRep_DSFiller.hxx>
 #include <TopTools_DataMapIteratorOfDataMapOfShapeShape.hxx>
+
+#include <Standard_Version.hxx>
+
 #include <stdio.h>
 
 //=======================================================================
@@ -243,7 +246,12 @@ static void PutInBounds (const TopoDS_Face&          F,
       Standard_Integer i, nbExt = anExtPS.NbExt();
       Extrema_POnSurf aPOnSurf;
       for (i = 1; i <= nbExt; ++i )
+#if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060400
+// porting to OCCT6.5.1
+        if (anExtPS.SquareDistance( i ) <= TolE * TolE) {
+#else
         if (anExtPS.Value( i ) <= TolE) {
+#endif
           aPOnSurf = anExtPS.Point( i );
           break;
         }
