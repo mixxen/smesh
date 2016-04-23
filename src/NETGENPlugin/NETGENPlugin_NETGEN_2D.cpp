@@ -24,7 +24,7 @@
 // Author : Michael Sazonov (OCN)
 // Date   : 20/03/2006
 // Project   : SALOME
-// $Header$
+// $Header: /home/server/cvs/NETGENPLUGIN/NETGENPLUGIN_SRC/src/NETGENPlugin/NETGENPlugin_NETGEN_2D.cxx,v 1.4.2.2 2008/11/27 14:29:44 abd Exp $
 //=============================================================================
 //
 #include "NETGENPlugin_NETGEN_2D.hxx"
@@ -44,7 +44,7 @@ using namespace std;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -65,7 +65,7 @@ NETGENPlugin_NETGEN_2D::NETGENPlugin_NETGEN_2D(int hypId, int studyId,
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -76,7 +76,7 @@ NETGENPlugin_NETGEN_2D::~NETGENPlugin_NETGEN_2D()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -129,13 +129,6 @@ bool NETGENPlugin_NETGEN_2D::Compute(SMESH_Mesh&         aMesh,
   mesher.SetParameters(dynamic_cast<const NETGENPlugin_SimpleHypothesis_2D*>(_hypothesis));
   return mesher.Compute();
 }
-
-
-//=============================================================================
-/*!
- *
- */
-//=============================================================================
 
 bool NETGENPlugin_NETGEN_2D::Evaluate(SMESH_Mesh&         aMesh,
                                       const TopoDS_Shape& aShape,

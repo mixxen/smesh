@@ -61,6 +61,9 @@
 /*
   Netgen include files
 */
+#ifdef _MSC_VER
+#pragma warning(disable : 4067)
+#endif
 
 namespace nglib {
 #include <nglib.h>
@@ -70,7 +73,7 @@ using namespace std;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -92,7 +95,7 @@ NETGENPlugin_NETGEN_3D::NETGENPlugin_NETGEN_3D(int hypId, int studyId,
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -103,7 +106,7 @@ NETGENPlugin_NETGEN_3D::~NETGENPlugin_NETGEN_3D()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -353,7 +356,9 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh&         aMesh,
 
   Ng_Meshing_Parameters Netgen_param;
 
-  Netgen_param.secondorder = Netgen_param2ndOrder;
+#ifdef NETGEN_V5
+  Netgen_param.second_order = Netgen_param2ndOrder;
+#endif
   Netgen_param.fineness = Netgen_paramFine;
   Netgen_param.maxh = Netgen_paramSize;
 
@@ -440,7 +445,7 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh&         aMesh,
 bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
                                      SMESH_MesherHelper* aHelper)
 {
-  MESSAGE("NETGENPlugin_NETGEN_3D::Compute with maxElmentsize = " << _maxElementVolume);  
+  MESSAGE("NETGENPlugin_NETGEN_3D::Compute with maxElmentsize = " << _maxElementVolume);
   const int invalid_ID = -1;
   bool _quadraticMesh = false;
   typedef map< const SMDS_MeshNode*, int, TIDCompare > TNodeToIDMap;
@@ -449,13 +454,13 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
   SMESHDS_Mesh* MeshDS = aHelper->GetMeshDS();
 
   SMESH_MesherHelper::MType MeshType = aHelper->IsQuadraticMesh();
-  
+
   if(MeshType == SMESH_MesherHelper::COMP)
     return error( COMPERR_BAD_INPUT_MESH,
                   SMESH_Comment("Mesh with linear and quadratic elements given."));
   else if (MeshType == SMESH_MesherHelper::QUADRATIC)
     _quadraticMesh = true;
-    
+
   StdMeshers_QuadToTriaAdaptor Adaptor;
   Adaptor.Compute(aMesh);
 
@@ -516,7 +521,7 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
   int Netgen_param2ndOrder = 0;
   double Netgen_paramFine = 1.;
   double Netgen_paramSize = pow( 72, 1/6. ) * pow( _maxElementVolume, 1/3. );
-  
+
   double Netgen_point[3];
   int Netgen_triangle[3];
   int Netgen_tetrahedron[4];
@@ -526,7 +531,7 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
   Ng_Mesh * Netgen_mesh = Ng_NewMesh();
 
     // set nodes and remember thier netgen IDs
-  
+
   TNodeToIDMap::iterator n_id = nodeToNetgenID.begin();
   for ( ; n_id != nodeToNetgenID.end(); ++n_id )
   {
@@ -554,7 +559,7 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
       Netgen_triangle[ i ] = nodeToNetgenID[ node ];
       ++i;
     }
-    
+
     Ng_AddSurfaceElement(Netgen_mesh, NG_TRIG, Netgen_triangle);
   }
 
@@ -564,7 +569,9 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
 
   Ng_Meshing_Parameters Netgen_param;
 
-  Netgen_param.secondorder = Netgen_param2ndOrder;
+#ifdef NETGEN_V5
+  Netgen_param.second_order = Netgen_param2ndOrder;
+#endif
   Netgen_param.fineness = Netgen_paramFine;
   Netgen_param.maxh = Netgen_paramSize;
 
@@ -611,7 +618,7 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
     }
     // create and insert new nodes into nodeVec
     int nodeIndex = Netgen_NbOfNodes + 1;
-    
+
     for ( ; nodeIndex <= Netgen_NbOfNodesNew; ++nodeIndex )
     {
       Ng_GetPoint( Netgen_mesh, nodeIndex, Netgen_point );
@@ -634,9 +641,9 @@ bool NETGENPlugin_NETGEN_3D::Compute(SMESH_Mesh& aMesh,
 
   Ng_DeleteMesh(Netgen_mesh);
   Ng_Exit();
-  
+
   NETGENPlugin_Mesher::RemoveTmpFiles();
-  
+
   return (status == NG_OK);
 }
 
@@ -725,6 +732,6 @@ bool NETGENPlugin_NETGEN_3D::Evaluate(SMESH_Mesh& aMesh,
   }
   SMESH_subMesh *sm = aMesh.GetSubMesh(aShape);
   aResMap.insert(std::make_pair(sm,aVec));
-  
+
   return true;
 }

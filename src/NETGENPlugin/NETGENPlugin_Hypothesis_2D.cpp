@@ -24,17 +24,17 @@
 // Author    : Michael Sazonov (OCN)
 // Date      : 28/03/2006
 // Project   : SALOME
-// $Header$
+// $Header: /home/server/cvs/NETGENPLUGIN/NETGENPLUGIN_SRC/src/NETGENPlugin/NETGENPlugin_Hypothesis_2D.cxx,v 1.4.2.1 2008/11/27 14:29:44 abd Exp $
 //=============================================================================
 //
-#include "NETGENPlugin_Hypothesis_2D.hxx"
+#include <NETGENPlugin_Hypothesis_2D.hxx>
 #include <utilities.h>
 
 using namespace std;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 NETGENPlugin_Hypothesis_2D::NETGENPlugin_Hypothesis_2D (int hypId, int studyId,
@@ -48,7 +48,7 @@ NETGENPlugin_Hypothesis_2D::NETGENPlugin_Hypothesis_2D (int hypId, int studyId,
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis_2D::SetQuadAllowed(bool theVal)
@@ -62,7 +62,7 @@ void NETGENPlugin_Hypothesis_2D::SetQuadAllowed(bool theVal)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 bool NETGENPlugin_Hypothesis_2D::GetDefaultQuadAllowed()
@@ -72,7 +72,7 @@ bool NETGENPlugin_Hypothesis_2D::GetDefaultQuadAllowed()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 ostream & NETGENPlugin_Hypothesis_2D::SaveTo(ostream & save)
@@ -86,7 +86,7 @@ ostream & NETGENPlugin_Hypothesis_2D::SaveTo(ostream & save)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 istream & NETGENPlugin_Hypothesis_2D::LoadFrom(istream & load)
@@ -96,7 +96,7 @@ istream & NETGENPlugin_Hypothesis_2D::LoadFrom(istream & load)
   bool isOK = true;
   int is;
 
-  isOK = static_cast<bool>(load >> is);
+  isOK = !(load >> is).bad();
   if (isOK)
     _quadAllowed = (bool) is;
   else

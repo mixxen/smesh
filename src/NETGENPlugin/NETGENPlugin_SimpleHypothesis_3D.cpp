@@ -40,7 +40,7 @@ using namespace std;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 NETGENPlugin_SimpleHypothesis_3D::NETGENPlugin_SimpleHypothesis_3D (int         hypId,
@@ -55,7 +55,7 @@ NETGENPlugin_SimpleHypothesis_3D::NETGENPlugin_SimpleHypothesis_3D (int         
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_SimpleHypothesis_3D::LengthFromFaces()
@@ -69,7 +69,7 @@ void NETGENPlugin_SimpleHypothesis_3D::LengthFromFaces()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_SimpleHypothesis_3D::SetMaxElementVolume(double value)
@@ -85,7 +85,7 @@ void NETGENPlugin_SimpleHypothesis_3D::SetMaxElementVolume(double value)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 ostream & NETGENPlugin_SimpleHypothesis_3D::SaveTo(ostream & save)
@@ -98,7 +98,7 @@ ostream & NETGENPlugin_SimpleHypothesis_3D::SaveTo(ostream & save)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 istream & NETGENPlugin_SimpleHypothesis_3D::LoadFrom(istream & load)
@@ -108,7 +108,7 @@ istream & NETGENPlugin_SimpleHypothesis_3D::LoadFrom(istream & load)
   bool isOK = true;
   double val;
 
-  isOK = static_cast<bool>(load >> val);
+  isOK = !(load >> val).bad();
   if (isOK)
     _volume = val;
   else

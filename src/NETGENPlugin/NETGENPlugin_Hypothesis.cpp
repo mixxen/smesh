@@ -32,7 +32,7 @@ using namespace std;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 NETGENPlugin_Hypothesis::NETGENPlugin_Hypothesis (int hypId, int studyId,
@@ -52,7 +52,7 @@ NETGENPlugin_Hypothesis::NETGENPlugin_Hypothesis (int hypId, int studyId,
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetMaxSize(double theSize)
@@ -66,7 +66,7 @@ void NETGENPlugin_Hypothesis::SetMaxSize(double theSize)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetSecondOrder(bool theVal)
@@ -80,7 +80,7 @@ void NETGENPlugin_Hypothesis::SetSecondOrder(bool theVal)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetOptimize(bool theVal)
@@ -94,7 +94,7 @@ void NETGENPlugin_Hypothesis::SetOptimize(bool theVal)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetFineness(Fineness theFineness)
@@ -140,7 +140,7 @@ void NETGENPlugin_Hypothesis::SetFineness(Fineness theFineness)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetGrowthRate(double theRate)
@@ -155,7 +155,7 @@ void NETGENPlugin_Hypothesis::SetGrowthRate(double theRate)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetNbSegPerEdge(double theVal)
@@ -170,7 +170,7 @@ void NETGENPlugin_Hypothesis::SetNbSegPerEdge(double theVal)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_Hypothesis::SetNbSegPerRadius(double theVal)
@@ -185,7 +185,7 @@ void NETGENPlugin_Hypothesis::SetNbSegPerRadius(double theVal)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 ostream & NETGENPlugin_Hypothesis::SaveTo(ostream & save)
@@ -202,7 +202,7 @@ ostream & NETGENPlugin_Hypothesis::SaveTo(ostream & save)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
@@ -211,13 +211,13 @@ istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
   int is;
   double val;
 
-  isOK = static_cast<bool>(load >> val);
+  isOK = !(load >> val).bad();
   if (isOK)
     _maxSize = val;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = static_cast<bool>(load >> is);
+  isOK = !(load >> is).bad();
   if (isOK)
     SetFineness((Fineness) is);
   else
@@ -225,32 +225,32 @@ istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
 
   if (_fineness == UserDefined)
   {
-    isOK = static_cast<bool>(load >> val);
+    isOK = !(load >> val).bad();
     if (isOK)
       _growthRate = val;
     else
       load.clear(ios::badbit | load.rdstate());
 
-    isOK = static_cast<bool>(load >> val);
+    isOK = !(load >> val).bad();
     if (isOK)
       _nbSegPerEdge = val;
     else
       load.clear(ios::badbit | load.rdstate());
 
-    isOK = static_cast<bool>(load >> val);
+    isOK = !(load >> val).bad();
     if (isOK)
       _nbSegPerRadius = val;
     else
       load.clear(ios::badbit | load.rdstate());
   }
 
-  isOK = static_cast<bool>(load >> is);
+  isOK = !(load >> is).bad();
   if (isOK)
     _secondOrder = (bool) is;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = static_cast<bool>(load >> is);
+  isOK = !(load >> is).bad();
   if (isOK)
     _optimize = (bool) is;
   else
@@ -260,7 +260,7 @@ istream & NETGENPlugin_Hypothesis::LoadFrom(istream & load)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 ostream & operator <<(ostream & save, NETGENPlugin_Hypothesis & hyp)
@@ -270,7 +270,7 @@ ostream & operator <<(ostream & save, NETGENPlugin_Hypothesis & hyp)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 istream & operator >>(istream & load, NETGENPlugin_Hypothesis & hyp)
@@ -310,7 +310,7 @@ bool NETGENPlugin_Hypothesis::SetParametersByDefaults(const TDefaults&  dflts,
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 double NETGENPlugin_Hypothesis::GetDefaultMaxSize()
@@ -320,7 +320,7 @@ double NETGENPlugin_Hypothesis::GetDefaultMaxSize()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 NETGENPlugin_Hypothesis::Fineness NETGENPlugin_Hypothesis::GetDefaultFineness()
@@ -330,7 +330,7 @@ NETGENPlugin_Hypothesis::Fineness NETGENPlugin_Hypothesis::GetDefaultFineness()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 double NETGENPlugin_Hypothesis::GetDefaultGrowthRate()
@@ -340,7 +340,7 @@ double NETGENPlugin_Hypothesis::GetDefaultGrowthRate()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 double NETGENPlugin_Hypothesis::GetDefaultNbSegPerEdge()
@@ -350,7 +350,7 @@ double NETGENPlugin_Hypothesis::GetDefaultNbSegPerEdge()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 double NETGENPlugin_Hypothesis::GetDefaultNbSegPerRadius()
@@ -360,7 +360,7 @@ double NETGENPlugin_Hypothesis::GetDefaultNbSegPerRadius()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 bool NETGENPlugin_Hypothesis::GetDefaultSecondOrder()
@@ -370,7 +370,7 @@ bool NETGENPlugin_Hypothesis::GetDefaultSecondOrder()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 bool NETGENPlugin_Hypothesis::GetDefaultOptimize()

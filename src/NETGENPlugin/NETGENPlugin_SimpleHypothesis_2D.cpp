@@ -40,7 +40,7 @@ using namespace std;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 NETGENPlugin_SimpleHypothesis_2D::NETGENPlugin_SimpleHypothesis_2D (int         hypId,
@@ -57,13 +57,13 @@ NETGENPlugin_SimpleHypothesis_2D::NETGENPlugin_SimpleHypothesis_2D (int         
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
-void NETGENPlugin_SimpleHypothesis_2D::SetNumberOfSegments(int nb) throw (SALOME_Exception)
+void NETGENPlugin_SimpleHypothesis_2D::SetNumberOfSegments(int nb) throw (SMESH_Exception)
 {
   if ( nb < 1 )
-    throw SALOME_Exception("Number of segments must be positive");
+    throw SMESH_Exception("Number of segments must be positive");
   if (nb != _nbSegments)
   {
     _nbSegments = nb;
@@ -74,14 +74,14 @@ void NETGENPlugin_SimpleHypothesis_2D::SetNumberOfSegments(int nb) throw (SALOME
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_SimpleHypothesis_2D::SetLocalLength(double segmentLength)
-  throw (SALOME_Exception)
+  throw (SMESH_Exception)
 {
   if ( segmentLength < DBL_MIN )
-    throw SALOME_Exception("segment length must be more than zero");
+    throw SMESH_Exception("segment length must be more than zero");
   if (segmentLength != _segmentLength)
   {
     _segmentLength = segmentLength;
@@ -92,7 +92,7 @@ void NETGENPlugin_SimpleHypothesis_2D::SetLocalLength(double segmentLength)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_SimpleHypothesis_2D::LengthFromEdges()
@@ -106,7 +106,7 @@ void NETGENPlugin_SimpleHypothesis_2D::LengthFromEdges()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 void NETGENPlugin_SimpleHypothesis_2D::SetMaxElementArea(double area)
@@ -122,7 +122,7 @@ void NETGENPlugin_SimpleHypothesis_2D::SetMaxElementArea(double area)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 ostream & NETGENPlugin_SimpleHypothesis_2D::SaveTo(ostream & save)
@@ -134,7 +134,7 @@ ostream & NETGENPlugin_SimpleHypothesis_2D::SaveTo(ostream & save)
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 istream & NETGENPlugin_SimpleHypothesis_2D::LoadFrom(istream & load)
@@ -142,19 +142,19 @@ istream & NETGENPlugin_SimpleHypothesis_2D::LoadFrom(istream & load)
   bool isOK = true;
   double val;
 
-  isOK = static_cast<bool>(load >> val);
+  isOK = !(load >> val).bad();
   if (isOK)
     _nbSegments = (int) val;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = static_cast<bool>(load >> val);
+  isOK = !(load >> val).bad();
   if (isOK)
     _segmentLength = val;
   else
     load.clear(ios::badbit | load.rdstate());
 
-  isOK = static_cast<bool>(load >> val);
+  isOK = !(load >> val).bad();
   if (isOK)
     _area = val;
   else
@@ -221,4 +221,3 @@ bool NETGENPlugin_SimpleHypothesis_2D::SetParametersByDefaults(const TDefaults& 
   _segmentLength = dflts._elemLength;
   return _nbSegments && _segmentLength > 0;
 }
-

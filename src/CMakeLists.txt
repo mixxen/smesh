@@ -114,7 +114,8 @@ set(NETGENPlugin_SRCS
 set(StdMeshers_SRCS
     #MEFISTO2/trte.for
     MEFISTO2/aptrte.cpp
-    MEFISTO2/trte.f
+    #MEFISTO2/trte.f
+    MEFISTO2/trte.c
     StdMeshers/StdMeshers_Arithmetic1D.cpp
     StdMeshers/StdMeshers_AutomaticLength.cpp
     StdMeshers/StdMeshers_CompositeHexa_3D.cpp
@@ -171,13 +172,16 @@ if(MONOLITHIC_BUILD)
         ${SMDS_SRCS}
         ${SMESH_SRCS}
         ${SMESHDS_SRCS}
-        ${StdMeshers_SRCS})
+        ${StdMeshers_SRCS}
+        ${NETGENPlugin_SRCS})
     target_link_libraries(SMESH ${OCE_LIBRARIES})
+    set_target_properties(SMESH PROPERTIES COMPILE_FLAGS "-DMEFISTO2D_EXPORTS")
     set_target_properties(SMESH PROPERTIES
         SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
         VERSION ${${PROJECT_NAME}_ABI_VERSION})
 else()
-    set(SMESH_LIBRARIES Driver;DriverDAT;DriverSTL;DriverUNV;SMDS;SMESH;SMESHDS;StdMeshers)
+    set(SMESH_LIBRARIES Driver;DriverDAT;DriverSTL;DriverUNV;SMDS;SMESH;SMESHDS;StdMeshers;NETGENPlugin)
+
 
     foreach(_lib ${SMESH_LIBRARIES})
         add_library(${_lib} ${${_lib}_SRCS})
@@ -192,6 +196,7 @@ else()
     target_link_libraries(SMESH Driver DriverDAT DriverUNV DriverSTL SMESHDS)
     target_link_libraries(SMESHDS SMDS)
     target_link_libraries(StdMeshers SMESH)
+    target_link_libraries(NETGENPlugin SMESH)
 endif()
 
 if(UNIX)

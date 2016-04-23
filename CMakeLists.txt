@@ -1,11 +1,13 @@
 # SMESH cmake build file
-project(SMESH CXX Fortran)
+project(SMESH CXX Fortran C)
 cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
 set(SMESH_VERSION_MINOR 6)
 set(SMESH_VERSION_PATCH)
 set(SMESH_VERSION_TWEAK)
+
+include_directories(/opt/netgen/include /workspace/netgen-4.9.13/libsrc/include)
 
 
 #####################
@@ -37,7 +39,7 @@ endif(SMESH_TESTING)
 ################################
 # OCE include and lib location #
 ################################
-set(OCE_REQUIRED_LIBS TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing)
+set(OCE_REQUIRED_LIBS TKernel TKMath TKBRep TKG2d TKG3d TKMeshVS TKPrim TKGeomBase TKGeomAlgo TKTopAlgo TKShHealing nglib)
 find_package(OCE
     COMPONENTS ${OCE_REQUIRED_LIBS}
     CONFIG)

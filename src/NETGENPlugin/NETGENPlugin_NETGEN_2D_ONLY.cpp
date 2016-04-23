@@ -39,7 +39,6 @@
 #include "StdMeshers_LengthFromEdges.hxx"
 #include "StdMeshers_QuadranglePreference.hxx"
 
-#include <Precision.hxx>
 #include <Standard_ErrorHandler.hxx>
 #include <Standard_Failure.hxx>
 
@@ -47,21 +46,31 @@
 
 #include <list>
 #include <vector>
-#include <limits>
 
 /*
   Netgen include files
 */
+#ifdef _MSC_VER
+#pragma warning(disable : 4067)
+#endif
+
 namespace nglib {
 #include <nglib.h>
 }
-#define OCCGEOMETRY
+#ifndef OCCGEOMETRY
+# define OCCGEOMETRY
+#endif
+
 #include <occgeom.hpp>
 #include <meshing.hpp>
 //#include <meshtype.hpp>
 namespace netgen {
-  extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, int, int, char*);
-  /*extern*/ MeshingParameters mparam;
+#ifdef NETGEN_V5
+  DLL_HEADER extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, MeshingParameters&, int, int);
+#else
+  DLL_HEADER extern int OCCGenerateMesh (OCCGeometry&, Mesh*&, int, int, char*);
+#endif
+  DLL_HEADER extern MeshingParameters mparam;
 }
 
 using namespace std;
@@ -70,7 +79,7 @@ using namespace nglib;
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -80,7 +89,7 @@ NETGENPlugin_NETGEN_2D_ONLY::NETGENPlugin_NETGEN_2D_ONLY(int hypId, int studyId,
 {
   MESSAGE("NETGENPlugin_NETGEN_2D_ONLY::NETGENPlugin_NETGEN_2D_ONLY");
   _name = "NETGEN_2D_ONLY";
-  
+
   _shapeType = (1 << TopAbs_FACE);// 1 bit /shape type
 
   _compatibleHypothesis.push_back("MaxElementArea");
@@ -94,7 +103,7 @@ NETGENPlugin_NETGEN_2D_ONLY::NETGENPlugin_NETGEN_2D_ONLY(int hypId, int studyId,
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -105,7 +114,7 @@ NETGENPlugin_NETGEN_2D_ONLY::~NETGENPlugin_NETGEN_2D_ONLY()
 
 //=============================================================================
 /*!
- *  
+ *
  */
 //=============================================================================
 
@@ -180,7 +189,7 @@ static TError AddSegmentsToMesh(netgen::Mesh&                    ngMesh,
     if ( wire->MissVertexNode() )
       return TError
         (new SMESH_ComputeError(COMPERR_BAD_INPUT_MESH, "Missing nodes on vertices"));
-      
+
     const vector<UVPtStruct>& uvPtVec = wire->GetUVPtStruct();
     if ( uvPtVec.size() != wire->NbPoints() )
       return TError
@@ -228,8 +237,8 @@ static TError AddSegmentsToMesh(netgen::Mesh&                    ngMesh,
       // Add the segment
       Segment seg;
 
-      seg.p1 = ngMesh.GetNP();          // ng node id
-      seg.p2 = seg.p1 + 1;              // ng node id
+      seg.pnums[0] = ngMesh.GetNP();          // ng node id
+      seg.pnums[1] = seg.pnums[0] + 1;              // ng node id
       seg.edgenr = ngMesh.GetNSeg() + 1;// segment id
       seg.si = faceID;                  // = geom.fmap.FindIndex (face);
 
@@ -271,10 +280,10 @@ static TError AddSegmentsToMesh(netgen::Mesh&                    ngMesh,
 //            << "\tp1 edge: " << seg.epgeominfo[ 1 ].edgenr << endl;
     }
     Segment& seg = ngMesh.LineSegment( ngMesh.GetNSeg() );
-    seg.p2 = firstPointID;
+    seg.pnums[1] = firstPointID;
   }
 
-  ngMesh.CalcSurfacesOfNode();  
+  ngMesh.CalcSurfacesOfNode();
 
   return TError();
 }
@@ -297,7 +306,7 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
   _quadraticMesh = helper.IsQuadraticSubMesh(aShape);
   helper.SetElementsOnShape( true );
   const bool ignoreMediumNodes = _quadraticMesh;
-  
+
   // ------------------------
   // get all edges of a face
   // ------------------------
@@ -337,7 +346,7 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
   // --------------------
 
   double edgeLength = 0;
-  if (_hypLengthFromEdges || !_hypLengthFromEdges && !_hypMaxElementArea)
+  if (_hypLengthFromEdges || (!_hypLengthFromEdges && !_hypMaxElementArea))
   {
     int nbSegments = 0;
     for ( int iW = 0; iW < nbWires; ++iW )
@@ -375,7 +384,11 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
 #if (OCC_VERSION_MAJOR << 16 | OCC_VERSION_MINOR << 8 | OCC_VERSION_MAINTENANCE) > 0x060100
     OCC_CATCH_SIGNALS;
 #endif
+#ifdef NETGEN_V5
+    err = netgen::OCCGenerateMesh(occgeo, ngMesh,netgen::mparam, startWith, endWith);
+#else
     err = netgen::OCCGenerateMesh(occgeo, ngMesh, startWith, endWith, optstr);
+#endif
   }
   catch (Standard_Failure& ex) {
     string comment = ex.DynamicType()->Name();
@@ -406,7 +419,7 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
   for ( int i = nbInputNodes + 1; i <= nbNodes; ++i )
   {
     const MeshPoint& ngPoint = ngMesh->Point(i);
-    SMDS_MeshNode * node = meshDS->AddNode(ngPoint.X(), ngPoint.Y(), ngPoint.Z());
+    SMDS_MeshNode * node = meshDS->AddNode(ngPoint(0), ngPoint(1), ngPoint(2));
     nodeVec[ i-1 ] = node;
   }
 
@@ -444,7 +457,6 @@ bool NETGENPlugin_NETGEN_2D_ONLY::Compute(SMESH_Mesh&         aMesh,
 
   return !err;
 }
-
 
 //=============================================================================
 /*!
