@@ -174,7 +174,7 @@ if(MONOLITHIC_BUILD)
         ${SMESHDS_SRCS}
         ${StdMeshers_SRCS}
         ${NETGENPlugin_SRCS})
-    target_link_libraries(SMESH ${OCE_LIBRARIES})
+    target_link_libraries(SMESH ${OCE_LIBRARIES} ${NETGEN_LIBRARIES})
     set_target_properties(SMESH PROPERTIES COMPILE_FLAGS "-DMEFISTO2D_EXPORTS")
     set_target_properties(SMESH PROPERTIES
         SOVERSION ${${PROJECT_NAME}_ABI_SOVERSION}
@@ -196,7 +196,7 @@ else()
     target_link_libraries(SMESH Driver DriverDAT DriverUNV DriverSTL SMESHDS)
     target_link_libraries(SMESHDS SMDS)
     target_link_libraries(StdMeshers SMESH)
-    target_link_libraries(NETGENPlugin SMESH)
+    target_link_libraries(NETGENPlugin ${NETGEN_LIBRARIES} SMESH)
 endif()
 
 if(UNIX)
