@@ -7,12 +7,14 @@ set(SMESH_VERSION_MINOR 6)
 set(SMESH_VERSION_PATCH)
 set(SMESH_VERSION_TWEAK)
 
-##########
-# Netgen #
-##########
-include_directories(/opt/netgen/include ${CMAKE_ROOT}/netgen-4.9.13/libsrc/include)
+############
+# Netgen 5 #
+############
+add_definitions(-DNETGEN_V5)
+include_directories(/opt/netgen/include)
+include_directories(./netgen-5.3.1/libsrc/include)
 link_directories(/opt/netgen/lib)
-
+set(NETGEN_LIBRARIES nglib mesh occ csg geom2d stl interface)
 
 #####################
 # Set ABI SOVERSION #
