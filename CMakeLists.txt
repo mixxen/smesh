@@ -1,5 +1,5 @@
 # SMESH cmake build file
-project(SMESH CXX Fortran C)
+project(SMESH CXX C)
 cmake_minimum_required(VERSION 2.8)
 
 set(SMESH_VERSION_MAJOR 6)
